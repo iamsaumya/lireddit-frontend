@@ -1,8 +1,8 @@
-import React from 'react';
-import { Formik, Form } from 'formik';
-import { Wrapper } from '../components/Wrapper';
-import { InputField } from '../components/InputField';
-import { Box, Button } from '@chakra-ui/core';
+import React from "react";
+import { Formik, Form } from "formik";
+import { Wrapper } from "../components/Wrapper";
+import { InputField } from "../components/InputField";
+import { Box, Button } from "@chakra-ui/core";
 
 interface registerProps {}
 
@@ -11,8 +11,8 @@ const register: React.FC<registerProps> = ({}) => {
     <Wrapper variant="small">
       <Formik
         initialValues={{
-          username: '',
-          password: ''
+          username: "",
+          password: "",
         }}
         onSubmit={(values) => {
           console.log(values);

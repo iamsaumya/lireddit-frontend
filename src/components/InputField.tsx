@@ -2,10 +2,10 @@ import {
   FormControl,
   FormLabel,
   Input,
-  FormErrorMessage
-} from '@chakra-ui/core';
-import { useField } from 'formik';
-import React, { InputHTMLAttributes } from 'react';
+  FormErrorMessage,
+} from "@chakra-ui/core";
+import { useField } from "formik";
+import React, { InputHTMLAttributes } from "react";
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
