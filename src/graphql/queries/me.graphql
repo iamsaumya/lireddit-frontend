@@ -1,0 +1,6 @@
+query Me {
+  Me {
+    id
+    username
+  }
+}
