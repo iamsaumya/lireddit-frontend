@@ -11,7 +11,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     return null;
   } else if (!data?.Me) {
     return (
-      <Flex bg="tomato" p={4}>
+      <Flex bg="tan" p={4}>
         <Box ml={"auto"}>
           <Link href="/login" mr={2}>
             Login
@@ -24,7 +24,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     );
   } else {
     return (
-      <Flex bg="tomato" p={4}>
+      <Flex bg="tan" p={4}>
         <Box ml={"auto"}>
           <Text>{data.Me.username}</Text>
         </Box>
