@@ -4,5 +4,6 @@ query Post {
     createdAt
     updatedAt
     title
+    text
   }
 }
