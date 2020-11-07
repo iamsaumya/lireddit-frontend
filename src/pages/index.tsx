@@ -1,17 +1,20 @@
 import { Box } from "@chakra-ui/core";
 import { withUrqlClient } from "next-urql";
 import React from "react";
-import { NavBar } from "../components/NavBar";
-import { usePostQuery } from "../generated/graphql";
+import { Layout } from "../components/Layout";
+import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
-  const [{ data }] = usePostQuery();
-  console.log(data);
+  const [{ data }] = usePostsQuery({
+    variables: {
+      limit: 15,
+      cursor: null
+    }
+  });
 
   return (
-    <React.Fragment>
-      <NavBar />
+    <Layout variant="small">
       <Box>Hello World</Box>
       {data &&
         data.posts.map((d) => (
@@ -19,7 +22,7 @@ const Index = () => {
             {d.title} {d.text}
           </Box>
         ))}
-    </React.Fragment>
+    </Layout>
   );
 };
 
