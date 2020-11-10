@@ -1,35 +1,64 @@
-import { Box, Heading, Stack, Text } from "@chakra-ui/core";
+import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/core";
 import { withUrqlClient } from "next-urql";
-import React from "react";
+import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import NextLink from "next/link";
 
-const Feature = ({ title, desc }) => {
+const Feature = ({ title, desc, id }) => {
   return (
     <Box p={5} shadow="md" borderWidth="1px">
-      <Heading fontSize="xl">{title}</Heading>
+      <Heading fontSize="xl">
+        {title} {id}
+      </Heading>
       <Text mt={4}>{desc}</Text>
     </Box>
   );
 };
 
 const Index = () => {
-  const [{ data }] = usePostsQuery({
-    variables: {
-      limit: 15,
-      cursor: null
-    }
+  const [variables, setVariables] = useState({
+    limit: 15,
+    cursor: null as null | string
   });
+  const [{ data, fetching }] = usePostsQuery({ variables });
 
+  if (!fetching && !data) {
+    return <Box>Query failed</Box>;
+  }
   return (
     <Layout variant="regular">
-      {data &&
-        data.posts.map((d) => (
+      <Flex align="center">
+        <Heading>LiReddit</Heading>
+        <NextLink href="/create-post">
+          <Link ml="auto">create post</Link>
+        </NextLink>
+      </Flex>
+      <br />
+      {data.posts &&
+        data.posts.posts.map((d) => (
           <Stack spacing={8} key={d.id}>
-            <Feature title={d.title} desc={d.textSnippet} />
+            <Feature title={d.title} desc={d.textSnippet} id={d.id} />
           </Stack>
         ))}
+      {data.posts && data.posts.hasMore && (
+        <Flex>
+          <Button
+            onClick={() =>
+              setVariables({
+                limit: variables.limit,
+                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt
+              })
+            }
+            isLoading={fetching}
+            m="auto"
+            my={8}
+          >
+            load more
+          </Button>
+        </Flex>
+      )}
     </Layout>
   );
 };
