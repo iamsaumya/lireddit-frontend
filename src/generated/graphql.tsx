@@ -43,6 +43,8 @@ export type Post = {
   text: Scalars['String'];
   points: Scalars['Float'];
   creatorId: Scalars['Float'];
+  creator: User;
+  updoots: Updoot;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -57,8 +59,18 @@ export type User = {
   updatedAt: Scalars['String'];
 };
 
+export type Updoot = {
+  __typename?: 'Updoot';
+  userId: Scalars['Float'];
+  value: Scalars['Float'];
+  postId: Scalars['Float'];
+  user: User;
+  post: Post;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  vote: Scalars['Boolean'];
   createPost: Post;
   updatePost?: Maybe<Post>;
   deletePostById: Scalars['Boolean'];
@@ -67,6 +79,12 @@ export type Mutation = {
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
   logout: Scalars['Boolean'];
+};
+
+
+export type MutationVoteArgs = {
+  postId: Scalars['Int'];
+  value: Scalars['Int'];
 };
 
 
@@ -247,13 +265,13 @@ export type RegisterMutation = (
   ) }
 );
 
-export type PostsQueryVariables = Exact<{
+export type PostQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
 }>;
 
 
-export type PostsQuery = (
+export type PostQuery = (
   { __typename?: 'Query' }
   & { posts: (
     { __typename?: 'PaginatedPosts' }
@@ -261,6 +279,10 @@ export type PostsQuery = (
     & { posts: Array<(
       { __typename?: 'Post' }
       & Pick<Post, 'id' | 'createdAt' | 'creatorId' | 'updatedAt' | 'title' | 'textSnippet'>
+      & { creator: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'email'>
+      ) }
     )> }
   ) }
 );
@@ -379,8 +401,8 @@ ${RegularUserFragmentDoc}`;
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
-export const PostsDocument = gql`
-    query Posts($limit: Int!, $cursor: String) {
+export const PostDocument = gql`
+    query Post($limit: Int!, $cursor: String) {
   posts(limit: $limit, cursor: $cursor) {
     hasMore
     posts {
@@ -390,11 +412,16 @@ export const PostsDocument = gql`
       updatedAt
       title
       textSnippet
+      creator {
+        id
+        username
+        email
+      }
     }
   }
 }
     `;
 
-export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });
+export function usePostQuery(options: Omit<Urql.UseQueryArgs<PostQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<PostQuery>({ query: PostDocument, ...options });
 };
