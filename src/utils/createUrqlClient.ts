@@ -5,13 +5,15 @@ import {
   MeQuery,
   MeDocument,
   LoginMutation,
-  RegisterMutation
+  RegisterMutation,
+  VoteMutationVariables
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
 import { pipe, tap } from "wonka";
 import { Exchange } from "urql";
 import Router from "next/router";
+import gql from "graphql-tag";
 
 export const errorExchange: Exchange = ({ forward }) => (ops$) => {
   return pipe(
@@ -133,6 +135,30 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          vote: (_result, args, cache, __) => {
+            const { postId, value } = args as VoteMutationVariables;
+            const data = cache.readFragment(
+              gql`
+                fragment _ on Post {
+                  id
+                  points
+                }
+              `,
+              { id: postId } as any
+            );
+
+            if (data) {
+              const newPoints = (data.points as number) + value;
+              cache.writeFragment(
+                gql`
+                  fragment __ on Post {
+                    points
+                  }
+                `,
+                { id: postId, points: newPoints } as any
+              );
+            }
+          },
           createPost: (_result, _, cache, __) => {
             console.log("start");
             console.log("allFields", cache.inspectFields("Query")); //see the state of all the queries in the database
