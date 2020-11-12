@@ -1,22 +1,11 @@
-import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/core";
+import { Box, Button, Flex, Heading, Link, Stack } from "@chakra-ui/core";
 import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
+import { Post } from "../components/Post";
 import { usePostQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import NextLink from "next/link";
-
-const Feature = ({ title, textSnippet, id, creator }) => {
-  return (
-    <Box p={5} key={id} shadow="md" borderWidth="1px">
-      <Heading fontSize="xl">
-        {title} {id}
-      </Heading>
-      <Text>posted by {creator.username}</Text>
-      <Text mt={4}>{textSnippet}</Text>
-    </Box>
-  );
-};
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -42,7 +31,7 @@ const Index = () => {
         {data.posts &&
           data.posts.posts.map((d) => (
             <Stack spacing={8} key={d.id}>
-              <Feature {...d} />
+              <Post post={d} />
             </Stack>
           ))}
         {data.posts && data.posts.hasMore && (
