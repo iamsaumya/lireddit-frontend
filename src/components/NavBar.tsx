@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link, Text } from "@chakra-ui/core";
+import { Box, Button, Flex, Heading, Link, Text } from "@chakra-ui/core";
 import React from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
@@ -17,7 +17,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     return <Box>Fetching</Box>;
   } else if (!data?.Me) {
     return (
-      <Flex bg="tan" p={4}>
+      <Flex bg="tan" p={4} alignItems="center">
+        <NextLink href="/">
+          <Link>
+            <Heading>LiReddit</Heading>
+          </Link>
+        </NextLink>
         <Box ml={"auto"}>
           <NextLink href="/login">
             <Link mr={2}>Login</Link>
@@ -30,7 +35,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     );
   } else {
     return (
-      <Flex bg="tan" p={4}>
+      <Flex bg="tan" p={4} alignItems="center">
+        <NextLink href="/">
+          <Link>
+            <Heading>LiReddit</Heading>
+          </Link>
+        </NextLink>
         <Box ml={"auto"}>
           <Text>{data.Me.username}</Text>
         </Box>

@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { Post } from "../components/Post";
-import { usePostQuery } from "../generated/graphql";
+import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
@@ -12,7 +12,7 @@ const Index = () => {
     limit: 15,
     cursor: null as null | string
   });
-  const [{ data, fetching }] = usePostQuery({ variables });
+  const [{ data, fetching }] = usePostsQuery({ variables });
 
   if (!fetching && !data) {
     return <Box>Query failed</Box>;
