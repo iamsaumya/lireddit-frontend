@@ -42,6 +42,7 @@ export type Post = {
   title: Scalars['String'];
   text: Scalars['String'];
   points: Scalars['Float'];
+  voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
   creator: User;
   updoots: Updoot;
@@ -150,7 +151,7 @@ export type UsernamePasswordInput = {
 
 export type PostSnippetFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'createdAt' | 'creatorId' | 'updatedAt' | 'title' | 'points' | 'textSnippet'>
+  & Pick<Post, 'id' | 'createdAt' | 'creatorId' | 'updatedAt' | 'title' | 'points' | 'voteStatus' | 'textSnippet'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'email'>
@@ -311,6 +312,7 @@ export const PostSnippetFragmentDoc = gql`
   updatedAt
   title
   points
+  voteStatus
   textSnippet
   creator {
     id

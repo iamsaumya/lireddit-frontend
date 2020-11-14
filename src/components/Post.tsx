@@ -7,7 +7,7 @@ interface PostProps {
 }
 
 export const Post: React.FC<PostProps> = ({ post }) => {
-  const { id, points, title, creator, textSnippet } = post;
+  const { id, points, title, creator, textSnippet, voteStatus } = post;
   const [loadingState, setLoadingState] = useState<
     "updoot-loading" | "downdoot-loading" | "not-loading"
   >("not-loading");
@@ -16,7 +16,11 @@ export const Post: React.FC<PostProps> = ({ post }) => {
     <Flex p={5} key={id} shadow="md" borderWidth="1px">
       <Flex direction="column" justifyContent="center" alignItems="center">
         <IconButton
+          variantColor={voteStatus === 1 ? "green" : undefined}
           onClick={async () => {
+            if (post.voteStatus === 1) {
+              return;
+            }
             setLoadingState("updoot-loading");
             await vote({ postId: id, value: 1 });
             setLoadingState("not-loading");
@@ -27,7 +31,11 @@ export const Post: React.FC<PostProps> = ({ post }) => {
         />
         {points}
         <IconButton
+          variantColor={voteStatus === -1 ? "red" : undefined}
           onClick={async () => {
+            if (post.voteStatus === -1) {
+              return;
+            }
             setLoadingState("downdoot-loading");
             await vote({ postId: id, value: -1 });
             setLoadingState("not-loading");

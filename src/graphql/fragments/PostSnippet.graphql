@@ -5,6 +5,7 @@ fragment PostSnippet on Post {
   updatedAt
   title
   points
+  voteStatus
   textSnippet
   creator {
     id
